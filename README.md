@@ -2,7 +2,7 @@
 
 Session Forge is a tool designed to enhance the management of tmux sessions, offering a user-friendly interface for session creation and management. This tool primarily addresses the limitations of `Alacritty`, a terminal emulator that does not support tabs, and provides a solution for those who frequently forget to start a tmux session. By streamlining the session management process, Session Forge makes it easier to organize and navigate multiple terminal sessions, bringing tab-like functionality to terminal environments where it's otherwise absent.
 
-![](./images/Screenshot from 2023-12-27 18-28-41.png)
+<img width="500px" src="./images/Screenshot from 2023-12-27 18-28-41.png" />
 
 ## Table of Contents
 
@@ -31,9 +31,9 @@ If the tmux server is not running, the script will automatically create a `main`
 - Close the terminal.
 
 <div align="center">
-    <img width="100px" src="./images/Screenshot from 2023-12-27 18-28-41.png" /> &nbsp;&nbsp;
-    <img width="100px" src="./images/Screenshot from 2023-12-27 18-28-50.png" /> &nbsp;&nbsp;
-    <img width="100px" src="./images/Screenshot from 2023-12-27 18-28-57.png" /> &nbsp;&nbsp;
+    <img width="200px" src="./images/Screenshot from 2023-12-27 18-28-41.png" /> &nbsp;&nbsp;
+    <img width="200px" src="./images/Screenshot from 2023-12-27 18-28-50.png" /> &nbsp;&nbsp;
+    <img width="200px" src="./images/Screenshot from 2023-12-27 18-28-57.png" /> &nbsp;&nbsp;
 </div>
 
 ## Configuration
