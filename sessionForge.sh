@@ -94,11 +94,7 @@ check_config() {
 	fi
 
 	# Read the content of the config file
-	local config_content
 	config_content=$(<"$config_file")
-	echo "Config content: $config_content"
-
-	sleep 2
 }
 
 draw_boxed_prompt() {
@@ -189,10 +185,12 @@ tmux_forge() {
 		fi
 	else
 		clear
-		echo "Welcome Sir.Nyvall! . . ."
+		echo -e "$config_content \033[0;32m$(tmux display-message -p '#{session_name}')\033[0m"
 	fi
 }
 
 check_dependencies
+
+check_config
 
 tmux_forge
