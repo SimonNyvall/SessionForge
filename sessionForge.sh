@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+handle_ctrl_c() {
+	kill -9 $PPID
+}
+
+trap handle_ctrl_c SIGINT
+
 check_dependencies() {
 	# Check if fzf is installed
 	if ! command -v fzf >/dev/null 2>&1; then
@@ -210,7 +216,20 @@ tmux_forge() {
 			*)
 				# Attach to the selected session
 				local session_name=$(echo "$chosen_option" | awk '{print $1}' | rev | cut -c 2- | rev)
-				tmux attach-session -t "$session_name"
+
+				if [[ $chosen_option == *"(attached)"* ]]; then
+					draw_boxed_prompt
+					echo -ne "\033[33mAlready attached. Reattach? (y/N): \033[0m"
+					read -r attach_answer
+
+					if [[ $attach_answer =~ ^[Yy]$ ]]; then
+						tmux attach-session -t "$session_name"
+					else
+						tmux_forge
+					fi
+				else
+					tmux attach-session -t "$session_name"
+				fi
 				;;
 			esac
 		fi
