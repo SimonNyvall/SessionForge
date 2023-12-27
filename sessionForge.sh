@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-handle_ctrl_c() {
-	kill -9 $PPID
-}
-
-trap handle_ctrl_c SIGINT
-
 check_dependencies() {
 	# Check if fzf is installed
 	if ! command -v fzf >/dev/null 2>&1; then
