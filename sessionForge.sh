@@ -144,7 +144,7 @@ tmux_forge() {
 
 			# List existing sessions and add the new session and exit options
 			tmux_sessions=$(tmux list-sessions)
-			tmux_sessions_with_options=$(echo -e "$tmux_sessions\n$new_session_option\n${RED}$exit_option${NC}")
+			tmux_sessions_with_options=$(echo -e "$tmux_sessions\n\033[0;32m$new_session_option\033[0m\n\033[0;31m$exit_option\033[0m")
 
 			chosen_option=$(echo "$tmux_sessions_with_options" | fzf --ansi --height 100% --reverse \
 				--preview 'if [[ "{}" == *"'"$new_session_option"'"* ]]; then 
@@ -158,23 +158,54 @@ tmux_forge() {
 
 			case $chosen_option in
 			"New session ")
-				# Prompt for new session name
-				draw_boxed_prompt
-				echo -ne "Enter session name: "
-				read -r session_name
+				prompt_for_session_name() {
+					local session_name=""
+					local key
+					local -i key_code
+					local prompt_text="Enter session name: "
 
-				while [[ $session_name =~ [^a-zA-Z0-9] ]] || [ -z "$session_name" ]; do
-					draw_boxed_prompt
-					echo -ne "\033[0;31mInvlid session name, try again\033[0m: "
-					read -r session_name
-				done
+					while true; do
+						draw_boxed_prompt
+						echo -ne "$prompt_text"
+						session_name=""
+						while IFS= read -r -n1 -s key; do
+							key_code=$(printf '%d' "'$key")
+
+							if [[ $key == "" ]]; then # Enter key (empty input)
+								echo
+								break
+							elif [[ $key_code == 127 ]]; then # Backspace key
+								if [[ -z $session_name ]]; then
+									echo
+									tmux_forge
+									return
+								else
+									session_name=${session_name%?}
+									echo -ne "\b \b"
+								fi
+							elif [[ $key =~ [a-zA-Z0-9] ]]; then
+								session_name+=$key
+								echo -n "$key"
+							fi
+						done
+
+						if [[ -n $session_name ]]; then
+							break
+						else
+							prompt_text="\033[0;31mYou must enter a session name: \033[0m"
+						fi
+					done
+
+					clear
+					tmux new -s "$session_name"
+				}
 
 				clear
-
-				tmux new -s "$session_name"
+				prompt_for_session_name
 				;;
 			"Exit terminal  (q)")
-				exit 0
+				clear
+				kill -9 $PPID
 				;;
 			*)
 				# Attach to the selected session
